@@ -1,5 +1,5 @@
 #gradle cache dir
-.gradle
+gradle/
 .gradle/
 #gradle build dir
 build/
