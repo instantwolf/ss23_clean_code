@@ -8,12 +8,8 @@ public class Main {
         // IntelliJ IDEA suggests fixing it.
         System.out.printf("Hello and welcome!");
 
-        // Press ⌃R or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+        TranslateAPIRequestHandler.tesRequest();
 
-            // Press ⌃D to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing ⌘F8.
-            System.out.println("i = " + i);
-        }
+        TranslateAPIRequestHandler.translateRequest("Bitte übersetze mich in die englische Sprache", "en");
     }
 }
