@@ -12,6 +12,7 @@ public class Main {
         // IntelliJ IDEA suggests fixing it.
         System.out.printf("Hello and welcome!");
 
+
         System.out.println("Enter your URL");
         int depth = 0;
         String url = "";
@@ -29,6 +30,8 @@ public class Main {
                 System.out.println("Enter a valid number");
             }
             System.out.println(url + " " + " " + targetLanguage + " " + depth);
+            WebCrawler crawler = new WebCrawler(url, targetLanguage, depth);
+            crawler.crawl(url, 0);
         }
     }
 }

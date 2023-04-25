@@ -1,10 +1,15 @@
 package org.example;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
 
 public class TranslateAPIRequestHandler
 {
@@ -37,7 +42,7 @@ public static void tesRequest(){
 
 
 public static void translateRequest(String textToTranslate, String targetLanguageCode){
-
+    TranslateAPIRequestHandler handler = new TranslateAPIRequestHandler();
     HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create("https://text-translator2.p.rapidapi.com/translate"))
             .header("content-type", "application/x-www-form-urlencoded")
@@ -49,7 +54,7 @@ public static void translateRequest(String textToTranslate, String targetLanguag
 
     try {
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+        handler.parseJSONfromBody(response.body());
     } catch (IOException e) {
         System.out.println("TRANSLATEAPI::translateRequest(): IOException aufgetreten");
         throw new RuntimeException(e);
@@ -59,7 +64,25 @@ public static void translateRequest(String textToTranslate, String targetLanguag
     }
 
 }
+public void parseJSONfromBody(String responseBody)
+{
+            // Parse the response body as a JSON object using Gson
+            Gson gson = new Gson();
+            JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 
+            // Extract the translated text from the JSON object
+            String translatedText = jsonObject.getAsJsonObject("data").get("translatedText").getAsString();
 
-
+    String detectedSourceLanguageName = jsonObject
+            .getAsJsonObject("data")
+            .getAsJsonObject("detectedSourceLanguage")
+            .get("name")
+            .getAsString();
+    // Print the translated text
+            System.out.println("Translated header into " + detectedSourceLanguageName + ": " + translatedText);
+    }
 }
+
+
+
+
