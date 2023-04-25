@@ -43,18 +43,17 @@ public static void tesRequest(){
 
 public static void translateRequest(String textToTranslate, String targetLanguageCode){
     TranslateAPIRequestHandler handler = new TranslateAPIRequestHandler();
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://text-translator2.p.rapidapi.com/translate"))
-            .header("content-type", "application/x-www-form-urlencoded")
-            .header("X-RapidAPI-Key", "d79c5b0869msh51b9569b6ad2468p10960ejsnd234da18ad6b")
-            .header("X-RapidAPI-Host", "text-translator2.p.rapidapi.com")
-            .method("POST", HttpRequest.BodyPublishers.ofString("source_language=auto" +
-                    "&target_language="+targetLanguageCode+"&text="+textToTranslate))
-            .build();
-
     try {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://text-translator2.p.rapidapi.com/translate"))
+                .header("content-type", "application/x-www-form-urlencoded")
+                .header("X-RapidAPI-Key", "d79c5b0869msh51b9569b6ad2468p10960ejsnd234da18ad6b")
+                .header("X-RapidAPI-Host", "text-translator2.p.rapidapi.com")
+                .method("POST", HttpRequest.BodyPublishers.ofString("source_language=auto" +
+                        "&target_language="+targetLanguageCode+"&text="+textToTranslate))
+                .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        handler.parseJSONfromBody(response.body());
+        handler.parseJSONfromBody(response.body(), targetLanguageCode);
     } catch (IOException e) {
         System.out.println("TRANSLATEAPI::translateRequest(): IOException aufgetreten");
         throw new RuntimeException(e);
@@ -64,7 +63,7 @@ public static void translateRequest(String textToTranslate, String targetLanguag
     }
 
 }
-public void parseJSONfromBody(String responseBody)
+public void parseJSONfromBody(String responseBody, String targetLanguage)
 {
             // Parse the response body as a JSON object using Gson
             Gson gson = new Gson();
@@ -78,8 +77,9 @@ public void parseJSONfromBody(String responseBody)
             .getAsJsonObject("detectedSourceLanguage")
             .get("name")
             .getAsString();
+
     // Print the translated text
-            System.out.println("Translated header into " + detectedSourceLanguageName + ": " + translatedText);
+            System.out.println("Translated header from " + detectedSourceLanguageName + " into " + targetLanguage + " : " + translatedText);
     }
 }
 

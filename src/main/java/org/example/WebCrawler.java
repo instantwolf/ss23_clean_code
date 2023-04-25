@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.HashSet;
 public class WebCrawler {
 
@@ -36,13 +35,10 @@ public class WebCrawler {
         try {
             Document document = Jsoup.connect(url).get();
 
-            // Translate the heading
             String heading = document.select("head title").text();
-            //String translatedHeading = translate(heading); // Translate heading
 
             System.out.println("Heading: " + heading);
             TranslateAPIRequestHandler.translateRequest(heading, targetLanguage);
-            //System.out.println("Translated Heading: " + translatedHeading);
             Elements links = document.select("a[href]");
 
             for (Element link : links) {
@@ -50,9 +46,17 @@ public class WebCrawler {
                 String href = link.absUrl("href");
                 crawl(href, depth + 1);
             }
-        } catch (IOException e) {
-            System.err.println("Could not crawl " + url + ": " + e.getMessage());
+            System.out.println("URL: " + url);
+            System.out.println("Depth: " + depth);
+        } catch (Exception e2) {
+            System.err.println("Could not crawl " + url + ": " + e2.getMessage());
+            System.out.println("URL: " + url + " <broken link> ");
+            System.out.println("Depth: " + depth);
         }
+    }
+    public HashSet<String> getLinks()
+    {
+        return visitedUrls;
     }
 
 }

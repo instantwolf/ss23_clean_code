@@ -10,10 +10,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
         // Press ⌥⏎ with your caret at the highlighted text to see how
         // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        System.out.printf("Hello and welcome! ");
 
 
-        System.out.println("Enter your URL");
+        System.out.println("Enter your URL like: http://www.example.com");
         int depth = 0;
         String url = "";
 
@@ -32,6 +32,10 @@ public class Main {
             System.out.println(url + " " + " " + targetLanguage + " " + depth);
             WebCrawler crawler = new WebCrawler(url, targetLanguage, depth);
             crawler.crawl(url, 0);
+        }
+        else
+        {
+            System.out.println("Wrong URL type");
         }
     }
 }
