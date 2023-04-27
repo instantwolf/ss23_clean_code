@@ -1,4 +1,4 @@
-package org.example;
+package edu.aau.cleancode.webcrawler;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

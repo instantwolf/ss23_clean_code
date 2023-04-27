@@ -1,4 +1,4 @@
-package org.example;
+package edu.aau.cleancode.webcrawler;
 
 /** This enum contains a list of all possible HTTP response codes according to its RFC definition.
  * This class is immutable and thread-safe, as all instances are created statically and their

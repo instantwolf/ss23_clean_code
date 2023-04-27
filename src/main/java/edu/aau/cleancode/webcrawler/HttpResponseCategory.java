@@ -1,4 +1,4 @@
-package org.example;
+package edu.aau.cleancode.webcrawler;
 
 /**
  * This class is introduced so that responses from servers can be classified correctly

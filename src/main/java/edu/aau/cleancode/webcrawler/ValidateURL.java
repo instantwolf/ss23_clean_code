@@ -1,4 +1,4 @@
-package org.example;
+package edu.aau.cleancode.webcrawler;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

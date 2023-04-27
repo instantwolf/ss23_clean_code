@@ -1,4 +1,4 @@
-package org.example;
+package edu.aau.cleancode.webcrawler;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

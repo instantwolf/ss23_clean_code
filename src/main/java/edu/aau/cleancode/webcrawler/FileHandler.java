@@ -1,4 +1,4 @@
-package org.example;
+package edu.aau.cleancode.webcrawler;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,7 +8,7 @@ public class FileHandler {
     private File file;
     private boolean overwrite;
 
-    public FileHandler(String filePath, boolean overwrite) {
+    public FileHandler(String filePath, boolean overwrite){
         file = new File(filePath);
         this.overwrite = overwrite;
     }
@@ -19,4 +19,10 @@ public class FileHandler {
         }
         return new FileWriter(file);
     }
+
+    public boolean isValidFilePath(String filePath){
+        return false;
+    }
+
+
 }

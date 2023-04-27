@@ -1,4 +1,4 @@
-package org.example;
+package edu.aau.cleancode.webcrawler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
