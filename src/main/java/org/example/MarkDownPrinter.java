@@ -12,7 +12,7 @@ public class MarkDownPrinter {
 
 
 
-    public printHeadingLine(String Heading, int headingnumber){
+    public void printHeadingLine(String Heading, int headingnumber){
 
     }
 }
