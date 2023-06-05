@@ -38,4 +38,23 @@ public class Main {
             System.out.println("Wrong URL type");
         }
     }
+
+    /**
+     * Goal of this subclass is to orchistrate the user into entering all necessary parameters
+     */
+    private static class StartupController{
+
+        private static int depth;
+
+        private static String URL;
+
+        private static String startUpLanguage;
+
+
+
+
+    }
+
+
 }
+
