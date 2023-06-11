@@ -13,7 +13,6 @@ public class WebCrawler {
     private String url;
     private String targetLanguage;
 
-    private ;
 
     private HashSet<String> visitedUrls; // Set of visited URLs
 

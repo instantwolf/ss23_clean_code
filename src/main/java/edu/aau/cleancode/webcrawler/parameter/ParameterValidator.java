@@ -9,5 +9,5 @@ public interface ParameterValidator<T> {
     /**
      * @return a boolean that indicates whether the provided parameter fits the validation criteria
      */
-    boolean validateParameter(T param);
+    boolean validateParameter(T paramToValidate);
 }
