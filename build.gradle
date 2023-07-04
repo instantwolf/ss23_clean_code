@@ -14,10 +14,12 @@ dependencies {
     implementation 'com.github.hazendaz.jsoup:jsoup:1.15.1'
     implementation 'com.github.hazendaz.jsoup:jsoup:1.15.1'
     implementation 'com.github.hazendaz.jsoup:jsoup:1.15.1'
+    implementation 'junit:junit:4.13.1'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation 'org.jsoup:jsoup:1.14.3'
     implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'org.mockito:mockito-core:5.4.0'
 }
 
 test {
