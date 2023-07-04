@@ -26,5 +26,5 @@ public interface HtmlParserAdapter {
      * This method takes an URL
      * @return
      */
-    List<URL> getLinks(String URL) throws IOException;
+    List<String> getLinks(String URL) throws IOException;
 }

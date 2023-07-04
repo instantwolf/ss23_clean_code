@@ -7,6 +7,7 @@ import edu.aau.cleancode.webcrawler.parser.JsoupHtmlParserAdapter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.List;
 
 // Press ⇧ twice to open the Search Everywhere dialog and type `show whitespaces`,
@@ -54,8 +55,11 @@ public class Main {
             List<HtmlHeading> headings = adapter.getHeadings("https://en.wikipedia.org/wiki/Web_crawler");
 
             System.out.println(headings.toString());
+
+            List<String> bla = adapter.getLinks("https://en.wikipedia.org/wiki/Web_crawler");
+            System.out.println(bla.toString());
         }catch (Exception e){
-            System.out.println(e.toString());
+            System.out.println(e);
             e.printStackTrace();
         }
 

@@ -7,7 +7,7 @@ import java.util.List;
 public class HtmlPage {
 
     List<HtmlHeading> headings;
-    List<URL> links;
+    List<String> links;
 
     HtmlPage(){
         headings = new ArrayList<>();

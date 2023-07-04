@@ -6,6 +6,11 @@ public class HtmlHeading {
 
     String content = "";
 
+    HtmlHeading(String tag, String content){
+        this.level = HtmlHeadingLevel.createFromString(tag);
+        this.content = content;
+    }
+
     HtmlHeading(HtmlHeadingLevel level, String content){
         this.level = level;
         this.content = content;
@@ -20,5 +25,13 @@ public class HtmlHeading {
 
     public String getString(){
         return this.content;
+    }
+
+    @Override
+    public String toString() {
+        return "HtmlHeading{" +
+                "level=" + level +
+                ", content='" + content + '\'' +
+                '}';
     }
 }

@@ -52,19 +52,37 @@ public class JsoupHtmlParserAdapter implements HtmlParserAdapter {
          URL url = new URL(target);
 
         List<Element> elements =  parser.getElements(url,
-                this.selectors.stream().filter(x -> x.type.equals(ParseSelectorType.HEADINGS)).collect(Collectors.toList()));
+                this.selectors.stream()
+                        .filter(x -> x.type.equals(ParseSelectorType.HEADINGS))
+                        .collect(Collectors.toList())
+        );
 
-        elements.forEach(System.out::println);
+        return elements.stream().map(this::convertElementToHeading).collect(Collectors.toList());
+     }
 
-        return new ArrayList<HtmlHeading>();
+    private HtmlHeading convertElementToHeading(Element e){
+        return new HtmlHeading(e.tag().toString(), e.wholeText().toString());
     }
-
 
 
     @Override
-    public List<URL> getLinks(String URL) {
-        return null;
-    }
+    public List<String> getLinks(String target) throws IOException {
+        URL url = new URL(target);
+
+        List<Element> elements =  parser.getElements(url,
+                this.selectors.stream()
+                        .filter(x -> x.type.equals(ParseSelectorType.LINKS))
+                        .collect(Collectors.toList()));
+
+        return elements.stream().map(this::elementToAbsoluteURL).collect(Collectors.toList());
+     }
+
+
+     private String elementToAbsoluteURL(Element elem){
+               return elem.absUrl("href");
+     }
+
+
 
 
 

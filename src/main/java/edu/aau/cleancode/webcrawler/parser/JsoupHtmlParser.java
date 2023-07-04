@@ -9,7 +9,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.List;
@@ -42,9 +41,6 @@ public class JsoupHtmlParser {
 
          //fetch site html
          Document document =  Jsoup.connect(Website.toString()).get();
-         //restrict to link selectors
-        //List<JsoupSelector> linkselectors =
-        // selectors.stream().filter(x -> x.getSelectorType() == JsoupSelectorType.HEADINGS).collect(Collectors.toList());
 
 
         Elements result = new Elements().empty();

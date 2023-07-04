@@ -13,6 +13,24 @@ public enum HtmlHeadingLevel {
         this.headingLevel = headinglevel;
     }
 
+
+
+
+    public static HtmlHeadingLevel createFromString(String headinglevel) {
+        String level = headinglevel.toLowerCase();
+        return
+                switch (level) {
+                    case "h1" -> createFromInt(1);
+                    case "h2" -> createFromInt(2);
+                    case "h3" -> createFromInt(3);
+                    case "h4" -> createFromInt(4);
+                    case "h5" -> createFromInt(5);
+                    case "h6" -> createFromInt(6);
+                    default -> throw new IllegalStateException("Unexpected value: " + level);
+                };
+    }
+
+
     public static boolean isValidHtmlHeadingLevel(int level){
         return level >= 1 && level <= 6;
     }
