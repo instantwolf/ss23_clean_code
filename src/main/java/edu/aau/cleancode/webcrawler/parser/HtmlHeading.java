@@ -23,8 +23,13 @@ public class HtmlHeading {
         this.content = content;
    }
 
-    public String getString(){
+    public String getContent(){
         return this.content;
+    }
+
+    public HtmlHeading setContent(String content){
+        this.content = content;
+        return this;
     }
 
     @Override

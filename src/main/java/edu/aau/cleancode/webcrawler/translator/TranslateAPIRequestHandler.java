@@ -3,13 +3,16 @@ package edu.aau.cleancode.webcrawler.translator;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import edu.aau.cleancode.webcrawler.parser.HtmlHeading;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class TranslateAPIRequestHandler
@@ -19,46 +22,12 @@ private static final String apiKey = "d79c5b0869msh51b9569b6ad2468p10960ejsnd234
 private static final String apiHostname = "text-translator2.p.rapidapi.com";
 
 
-public static void tesRequest(){
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://text-translator2.p.rapidapi.com/getLanguages"))
-            .header("X-RapidAPI-Key", "d79c5b0869msh51b9569b6ad2468p10960ejsnd234da18ad6b")
-            .header("X-RapidAPI-Host", "text-translator2.p.rapidapi.com")
-            .method("GET", HttpRequest.BodyPublishers.noBody())
-            .build();
-
-    HttpResponse<String> response = null;
-    try {
-        response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-    } catch (IOException e) {
-        System.out.println("TRANSLATEAPI::testRequest(): IOException aufgetreten");
-        throw new RuntimeException(e);
-    } catch (InterruptedException e) {
-        System.out.println("TRANSLATEAPI::testRequest(): Runtimeexception aufgetreten");
-        throw new RuntimeException(e);
-    }
-    System.out.println(response.body());
-
-}
-
-private static HttpRequest buildRequest(String targetLanguageCode, String textToTranslate){
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://text-translator2.p.rapidapi.com/translate"))
-            .header("content-type", "application/x-www-form-urlencoded")
-            .header("X-RapidAPI-Key", "d79c5b0869msh51b9569b6ad2468p10960ejsnd234da18ad6b")
-            .header("X-RapidAPI-Host", "text-translator2.p.rapidapi.com")
-            .method("POST", HttpRequest.BodyPublishers.ofString("source_language=auto" +
-                    "&target_language="+targetLanguageCode+"&text="+textToTranslate))
-            .build();
-    return request;
-}
-
-public static void translateRequest(String textToTranslate, String targetLanguageCode){
+public static String translateRequest(String textToTranslate, String targetLanguageCode){
     TranslateAPIRequestHandler handler = new TranslateAPIRequestHandler();
     try {
         HttpRequest request = buildRequest(targetLanguageCode,textToTranslate);
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        handler.parseJSONfromBody(response.body(), targetLanguageCode);
+         return getDataFromResponse(response);
     } catch (IOException e) {
         System.out.println("TRANSLATEAPI::translateRequest(): IOException aufgetreten");
         throw new RuntimeException(e);
@@ -68,28 +37,38 @@ public static void translateRequest(String textToTranslate, String targetLanguag
     }
 }
 
-private JsonObject getJsonObjet(Re){
-    return JsonParser.parseString(responseBody).getAsJsonObject();
+public static List<HtmlHeading> translateHeadings(List<HtmlHeading> headings, String targetLanguage){
+    List<HtmlHeading> translatedHeadings;
+    translatedHeadings = headings.stream().map(x ->  translateHeading(x, targetLanguage)).collect(Collectors.toList());
+    return translatedHeadings;
 }
 
+public static HtmlHeading translateHeading(HtmlHeading heading, String targetLanguage){
+    String translatedHeading = translateRequest(heading.getContent(), targetLanguage);
+    return heading.setContent(translatedHeading);
+}
 
-public void parseJSONfromBody(String responseBody, String targetLanguage)
-{
-            // Parse the response body as a JSON object using Gson
-            JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
-
-            // Extract the translated text from the JSON object
-            String translatedText = jsonObject.getAsJsonObject("data").get("translatedText").getAsString();
-
-    String detectedSourceLanguageName = jsonObject
-            .getAsJsonObject("data")
-            .getAsJsonObject("detectedSourceLanguage")
-            .get("name")
-            .getAsString();
-
-    // Print the translated text
-    System.out.println("Translated header from " + detectedSourceLanguageName + " into " + targetLanguage + " : " + translatedText);
+    private static HttpRequest buildRequest(String targetLanguageCode, String textToTranslate){
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://text-translator2.p.rapidapi.com/translate"))
+                .header("content-type", "application/x-www-form-urlencoded")
+                .header("X-RapidAPI-Key", "d79c5b0869msh51b9569b6ad2468p10960ejsnd234da18ad6b")
+                .header("X-RapidAPI-Host", "text-translator2.p.rapidapi.com")
+                .method("POST", HttpRequest.BodyPublishers.ofString("source_language=auto" +
+                        "&target_language="+targetLanguageCode+"&text="+textToTranslate))
+                .build();
+        return request;
     }
+
+
+private static String getDataFromResponse(HttpResponse<String> response){
+// Parse the response body as a JSON object using Gson
+    JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
+
+    // Extract the translated text from the JSON object
+    return jsonObject.getAsJsonObject("data").get("translatedText").getAsString();}
+
+
 }
 
 

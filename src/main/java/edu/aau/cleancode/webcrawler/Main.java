@@ -1,13 +1,8 @@
 package edu.aau.cleancode.webcrawler;
 
-import edu.aau.cleancode.webcrawler.parser.HtmlHeading;
 import edu.aau.cleancode.webcrawler.parser.HtmlParserAdapter;
 import edu.aau.cleancode.webcrawler.parser.JsoupHtmlParserAdapter;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.List;
 
 // Press ⇧ twice to open the Search Everywhere dialog and type `show whitespaces`,
@@ -50,7 +45,7 @@ public class Main {
 
     public static void main(String[] args) {
         try{
-            JsoupHtmlParserAdapter adapter = new JsoupHtmlParserAdapter();
+          /**  JsoupHtmlParserAdapter adapter = new JsoupHtmlParserAdapter();
 
             List<HtmlHeading> headings = adapter.getHeadings("https://en.wikipedia.org/wiki/Web_crawler");
 
@@ -58,6 +53,22 @@ public class Main {
 
             List<String> bla = adapter.getLinks("https://en.wikipedia.org/wiki/Web_crawler");
             System.out.println(bla.toString());
+           */
+
+          /*
+            TranslateAPIRequestHandler translateAPIRequestHandler = new TranslateAPIRequestHandler();
+            String translation = TranslateAPIRequestHandler.translateRequest("Guten Tag!","en");
+            System.out.println(translation);
+            */
+            HtmlParserAdapter parser = new JsoupHtmlParserAdapter();
+
+            WebCrawler crawler = new WebCrawler("https://example.com/",
+                    "de",0,parser);
+            crawler.crawl();
+            List<CrawledPage> results = crawler.getResults();
+
+
+
         }catch (Exception e){
             System.out.println(e);
             e.printStackTrace();

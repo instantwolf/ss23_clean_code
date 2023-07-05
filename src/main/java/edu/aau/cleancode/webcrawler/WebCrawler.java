@@ -1,64 +1,100 @@
 package edu.aau.cleancode.webcrawler;
 
+import edu.aau.cleancode.webcrawler.parser.HtmlHeading;
+import edu.aau.cleancode.webcrawler.parser.HtmlParserAdapter;
 import edu.aau.cleancode.webcrawler.translator.TranslateAPIRequestHandler;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.util.HashSet;
-public class WebCrawler {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 
-    private int depth = 0; // Maximum depth to crawl
+/**
+ * This class utilizes one Parser and one Translator to crawl Sites
+ *
+ * As an argument , it takes a root url, and crawls recursively until the given depth is reached
+ */
+public class WebCrawler implements Callable<List<CrawledPage>> {
 
-    private String url;
+    private int targetDepth = 0; // Maximum depth to crawl, Default doesn't recursively crawl
+
+    private String startURL;
     private String targetLanguage;
 
+    private List<CrawledPage> visitedPages; // Set of visited URLs, add
 
-    private HashSet<String> visitedUrls; // Set of visited URLs
+    private HtmlParserAdapter parserAdapter;
 
-    private TranslateAPIRequestHandler translateAPIRequestHandler;
-
-    public WebCrawler(String url, String targetLanguage, int depth) {
-        this.visitedUrls = new HashSet<>();
-        this.url = url;
+    public WebCrawler(String url,
+                      String targetLanguage,
+                      int targetDepth,
+                      HtmlParserAdapter parserAdapter
+                         ) {
+        this.visitedPages = new ArrayList();
+        this.startURL = url.toLowerCase();
         this.targetLanguage = targetLanguage;
-        this.depth = depth;
-        this.translateAPIRequestHandler = new TranslateAPIRequestHandler();
+        this.targetDepth = targetDepth;
+        this.parserAdapter = parserAdapter;
     }
 
-    public void crawl(String url, int depth) {
-        if (depth > this.depth || visitedUrls.contains(url)) {
-            return;
-        }
+    public List<CrawledPage> crawl(){
+        return crawl(this.startURL,0,null);
+    }
 
-        visitedUrls.add(url);
+
+    private List<CrawledPage> crawl(String url, int depth, CrawledPage parentPage) {
+        if (depth > this.targetDepth || visitedPages.stream().filter((x -> x.url.equals(url))).count() > 0) {
+            return new ArrayList<CrawledPage>();
+        }
 
         try {
-            Document document = Jsoup.connect(url).get();
+            CrawledPage page = new CrawledPage(url, parentPage, depth);
+            visitedPages.add(page);
 
-            String heading = document.select("head title").text();
+            List<HtmlHeading> headings = retrieveHeadingsFromParser(page);
+            page.setHeadings(headings);
 
-            System.out.println("Heading: " + heading);
-            TranslateAPIRequestHandler.translateRequest(heading, targetLanguage);
-            Elements links = document.select("a[href]");
+            List<String> links = retrieveLinksFromParser(page);
+            page.setLinks(links);
 
-            for (Element link : links) {
-
-                String href = link.absUrl("href");
-                crawl(href, depth + 1);
+            if (depth < this.targetDepth) {
+                for (String link : page.getLinks()) {
+                    crawl(link, depth + 1, page);
+                }
             }
-            System.out.println("URL: " + url);
-            System.out.println("Depth: " + depth);
-        } catch (Exception e2) {
-            System.err.println("Could not crawl " + url + ": " + e2.getMessage());
-            System.out.println("URL: " + url + " <broken link> ");
-            System.out.println("Depth: " + depth);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }{
+            return this.visitedPages;
         }
     }
-    public HashSet<String> getLinks()
-    {
-        return visitedUrls;
+
+    private List<HtmlHeading> retrieveHeadingsFromParser(CrawledPage page) throws IOException {
+        List<HtmlHeading> originalHeadings =  parserAdapter.getHeadings(page.url);
+        List<HtmlHeading> translatedHeadings = TranslateAPIRequestHandler.translateHeadings(originalHeadings, this.targetLanguage);
+        return translatedHeadings;
     }
 
+    private List<String> retrieveLinksFromParser(CrawledPage page) throws IOException {
+        List<String> links =  parserAdapter.getLinks(page.url);
+        return links;
+    }
+
+
+    public List<CrawledPage> getResults(){
+        return this.visitedPages;
+    }
+
+    @Override
+    public List<CrawledPage> call() throws Exception {
+        return crawl();
+    }
 }
+
+
+
+
+
+
+
