@@ -51,4 +51,5 @@ public class CrawledPage {
     public void setLinks(List<String> links){
         this.links = links;
     }
+
 }
