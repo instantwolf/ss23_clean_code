@@ -16,7 +16,7 @@ public class ParallelCrawler {
 
     public ParallelCrawler(List<String> urls, String targetLanguage, int depth, HtmlParserAdapter adapter) {
         resultSet = new ArrayList<>();
-
+        this.crawlers = new ArrayList<>();
         this.urls = urls;
         for (String url: urls) { //init crawlers based on urls
            crawlers.add(new WebCrawler(url, targetLanguage,depth,adapter));

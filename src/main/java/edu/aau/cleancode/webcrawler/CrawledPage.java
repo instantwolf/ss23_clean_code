@@ -2,9 +2,11 @@ package edu.aau.cleancode.webcrawler;
 
 import edu.aau.cleancode.webcrawler.parser.HtmlHeading;
 import edu.aau.cleancode.webcrawler.parser.HtmlPage;
+import org.jsoup.internal.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CrawledPage {
 
@@ -50,6 +52,12 @@ public class CrawledPage {
 
     public void setLinks(List<String> links){
         this.links = links;
+    }
+
+    public String toString(){
+        return this.url + " " + this.depth + " " +
+                StringUtil.join(this.headings.stream().map(x-> x.toString()).collect(Collectors.toList()), " ")  + " "
+                + StringUtil.join(this.links, " ");
     }
 
 }
