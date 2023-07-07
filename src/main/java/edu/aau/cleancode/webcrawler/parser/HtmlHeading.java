@@ -32,6 +32,8 @@ public class HtmlHeading {
         return this;
     }
 
+    public int getHeadingLevelInt(){ return this.level.getHeadingLevelInt(); }
+
     @Override
     public String toString() {
         return "HtmlHeading{" +

@@ -48,6 +48,8 @@ public enum HtmlHeadingLevel {
                };
     }
 
+    public int getHeadingLevelInt(){ return this.headingLevel; }
+
     public static HtmlHeadingLevel getDefaultLevel(){
         return HtmlHeadingLevel.H1;
     }
