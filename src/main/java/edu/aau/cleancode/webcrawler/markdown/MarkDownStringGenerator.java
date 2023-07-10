@@ -15,7 +15,7 @@ public class MarkDownStringGenerator {
         markDownString = "";
     }
 
-    public void generateIntroMarkDown(List<String> inputUrls,int targetDepth, String sourceLanguage, String targetLanguage,
+    public String generateMarkDown(List<String> inputUrls,int targetDepth, String sourceLanguage, String targetLanguage,
     List<CrawledPage> crawledPages){
         addRow("input:");
         printInputUrls(inputUrls);
@@ -24,6 +24,8 @@ public class MarkDownStringGenerator {
         addRow("target language: "+targetLanguage);
         addRow("summary: ");
         printCrawlResultSet(crawledPages);
+
+        return this.markDownString;
     }
 
     private void printCrawlResultSet(List<CrawledPage> crawledPages) {
@@ -80,8 +82,6 @@ public class MarkDownStringGenerator {
     }
 
     private  void addRow(String rowToAdd){
-        this.markDownString += "<br>"+rowToAdd;
+        this.markDownString += "<br>"+rowToAdd+"\n";
     }
-
-
 }

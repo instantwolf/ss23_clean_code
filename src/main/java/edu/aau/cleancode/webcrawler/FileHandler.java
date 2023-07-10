@@ -6,19 +6,36 @@ import java.io.IOException;
 
 public class FileHandler {
     private File file;
-    private boolean overwrite;
 
-    public FileHandler(String filePath, boolean overwrite){
-        file = new File(filePath);
-        this.overwrite = overwrite;
+    private String filePath;
+
+    private boolean appendContent;
+
+    public FileHandler(String filePath, boolean appendContent){
+        this.file = new File(filePath);
+        this.filePath = filePath;
+        this.appendContent = appendContent;
     }
 
-    public FileWriter createFile() throws IOException {
-        if (file.exists() && !overwrite) {
-            throw new IOException("File already exists and overwrite flag is not set");
+    private FileWriter openFile() throws IOException {
+
+        if (!this.file.exists()) {
+            this.file.getParentFile().mkdirs();
+            this.file.createNewFile();
         }
-        return new FileWriter(file);
+
+        // Open the file in append mode or overwrite mode based on the appendMode parameter
+        FileWriter fileWriter = new FileWriter(file, this.appendContent);
+        return fileWriter;
     }
+
+    public void write(String content) throws IOException{
+        FileWriter writer = openFile();
+        writer.write(content);
+        writer.close();
+    }
+
+
 
     public boolean isValidFilePath(String filePath){
         return false;

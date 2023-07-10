@@ -1,9 +1,11 @@
 package edu.aau.cleancode.webcrawler;
 
+import edu.aau.cleancode.webcrawler.markdown.MarkDownStringGenerator;
 import edu.aau.cleancode.webcrawler.parser.HtmlParserAdapter;
 import edu.aau.cleancode.webcrawler.parser.JsoupHtmlParserAdapter;
 import org.jsoup.internal.StringUtil;
 
+import javax.sound.midi.SysexMessage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -81,6 +83,7 @@ public class Main {
             return;
         }
 
+
         int depth = Integer.parseInt(input);
         List<CrawledPage> resultSet = new ArrayList<>();
         JsoupHtmlParserAdapter adapter = new JsoupHtmlParserAdapter();
@@ -105,6 +108,21 @@ public class Main {
         resultSet.stream().forEach(x -> System.out.println(x.toString()));
 
        //TODO: Implement Printer class
+        //get MarkdownString
+        MarkDownStringGenerator generator = new MarkDownStringGenerator();
+        String markDown = generator.generateMarkDown(startUpUrls,depth,"auto-detect",targetLanguage,resultSet);
+
+        //print to file
+        String filePath = "./results.md";
+        FileHandler handler = new FileHandler( filePath,false);
+        try{
+            handler.write(markDown);
+        }catch (IOException e){
+            System.out.println("Something went wrong while writing to the file "+filePath );
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
     }
 
 
